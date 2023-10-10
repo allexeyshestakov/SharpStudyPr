@@ -1,4 +1,5 @@
 ﻿using System;
+using static SharpStudyPr.Person;
 
 namespace SharpStudyPr
 {
@@ -6,94 +7,82 @@ namespace SharpStudyPr
     {
         static void Main(string[] args)
         {
+            // Ввод количества людей
             Console.WriteLine("Введите количество студентов");
-
             int countStudents = int.Parse(Console.ReadLine());
 
             Console.WriteLine("Введите количество учителей:");
-
             int countTeachers = int.Parse(Console.ReadLine());
 
             Console.WriteLine("Введите количество работников:");
-
-            int countRab = int.Parse(Console.ReadLine());
-
+            int countLab = int.Parse(Console.ReadLine());
 
 
+            Person[] people = new Person[countStudents + countTeachers + countLab]; // Создание объекта класса
 
-            Person[] people = new Person[countStudents + countTeachers + countRab];
+            StudentShow ShowStudents = new StudentShow();
+            ShowStudents.ShowInputPeople(people, countStudents, countTeachers, countLab); // Ввод\Вывод студентов
 
+            TeacherShow ShowTeacher = new TeacherShow();
+            ShowTeacher.ShowInputPeople(people, countStudents, countTeachers, countLab); // Ввод\Вывод учителей
 
-            for (int i = 0; i < countStudents; i++)
-            {
-                Console.WriteLine("Введите имя студента");
-                string nameS = Console.ReadLine();
-                Console.WriteLine("Введите возраст студента");
-                int ageS = int.Parse(Console.ReadLine());
-                Console.WriteLine("Введите номер группы студента");
-                string grS = "Группа: " + int.Parse(Console.ReadLine());
-                Console.WriteLine("Введите оценка студента");
-                int pointS = int.Parse(Console.ReadLine());
-                Student student = new Student(nameS, ageS, grS, pointS);
-                people[i] = student;
-                student.ShowInfo();
-            }
-            for (int i = countStudents; i < countTeachers + countStudents; i++)
-            {
-                Console.WriteLine("Введите имя преподователя");
-                string nameT = Console.ReadLine();
-                Console.WriteLine("Введите возраст преподователя");
-                int ageT = int.Parse(Console.ReadLine());
-                Console.WriteLine("Введите номер группы преподователя");
-                string grT = "Группа: " + int.Parse(Console.ReadLine());
-                Console.WriteLine("Введите стаж работника");
-                int stT = int.Parse(Console.ReadLine());
-                Console.WriteLine("Введите предмет преподователя");
-                string suT = "предмет: " + Console.ReadLine();
-                Teacher teacher = new Teacher(nameT, ageT, suT, grT, stT);
-                people[i] = teacher;
-                teacher.ShowInfo();
-            }
+            LaborerShow ShowLaborer = new LaborerShow();
+            ShowLaborer.ShowInputPeople(people, countStudents, countTeachers, countLab); // Ввод\Вывод работников
 
-            for (int i = countTeachers + countStudents; i < countRab + countTeachers + countStudents; i++)
-            {
-                Console.WriteLine("Введите имя работника");
-                string nameR = Console.ReadLine();
-                Console.WriteLine("Введите возраст работника");
-                int ageR = int.Parse(Console.ReadLine());
-                Console.WriteLine("Введите вакансию");
-                string vakR = Console.ReadLine();
-                Console.WriteLine("Введите стаж работника");
-                int stR = int.Parse(Console.ReadLine());
-
-                Rab rab = new Rab(nameR, ageR, vakR, stR);
-                people[i] = rab;
-                rab.ShowInfo();
-            }
-
-            Student student1 = new Student("Студент", 17, "ыы", 3);
-
+            // Поиск человека с оценкой 5
+            Student student1 = new Student("Иван", 19, "ИС-22-11", 5);
             foreach (Person person in people)
             {
                 student1 = person as Student;
                 if (student1 != null)
-                    if (student1.point == 5)
+                    if (student1.mark == 5)
                         person.ShowInfo();
             }
-
-            Rab rab1 = new Rab("Работник", 2, "ewfw", 2);
-
+            // Поиск человека со стажем больше 10 лет
+            Laborer laborer1 = new Laborer("Владимир", 43, "ewfw", 15);
             foreach (Person person in people)
             {
-                rab1 = person as Rab;
-                if (rab1 != null)
-                    if (rab1.st > 10)
+                laborer1 = person as Laborer;
+                if (laborer1 != null)
+                    if (laborer1.experience > 10)
                         person.ShowInfo();
             }
 
-            Console.ReadLine();
+            // Созданный массив с экземплярами
+            //Person[] people1 = new Person[4]
+            //{
+            //    new Student("я", 17, "уИС-22-11", 5),
+            //    new Student("г", 16, "аИС-22-11", 4),
+            //    new Student("а", 12, "вИС-22-11", 1),
+            //    new Student("ы", 16, "цИС-22-11", 2),
+            //};
 
+            // Вывод информации о людях в алфавитном порядке
+            Console.WriteLine("До сортировки:");
+            foreach (var person in people)
+            {
+                person.ShowInfo();
+                Console.WriteLine();
+            }
 
+            Console.WriteLine("После сортировки:");
+            Array.Sort(people);
+            foreach (var person in people)
+            {
+                person.ShowInfo();
+                Console.WriteLine();
+            }
+
+            // Поиск человека по индексу
+            Console.WriteLine("Введите номер человека:");
+            Person personToFind = people[int.Parse(Console.ReadLine())];
+            int index = Array.IndexOf(people, personToFind) - 1;
+
+            people[index].ShowInfo();
+            Console.ReadKey();
         }
     }
+
 }
+
+
